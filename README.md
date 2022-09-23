@@ -17,8 +17,39 @@ And also the carry-in value of the first bit is connected to the ALU Opcode, whe
 5. 32 bits CSA
 
 ## c. 
-One of the bugs of this project is this project cannot detect the overflow of each input data_operandA and data_operandB. So when doing subtraction, if the input data_operandB has a decimal value -2^16, the overflow will happen. This is because we do subtraction by converting the number into opposite sign and add them together, which in this case is 2^16. However, the largest positive value the 32bits signed integer can represent is (2^16-1). Therefore, when we convert -2^16 to 2^16 for subtraction, overflow will happend but the project cannot detected, since we didn't design to check the single input overflow.    
+There is a bug in this project(has been corrected in the latest version), which the 2's completion of the negative number is not finished before addition. e.g. -2^16-(-2^16) after 2's complmentation, the calculation supposed to become
 
-Also, the results calculation will become 1000 0000 0000 0000 0000 0000 0000 0000 + 1000 0000 0000 0000 0000 0000 0000 0000 and the result become 0000 0000 0000 0000 0000 0000 0000 0000. And overflow should happened. But in this project, the overflow signal remain on 0, which is wrong.
+   1000 0000 0000 0000 0000 0000 0000 0000 
 
+   1000 0000 0000 0000 0000 0000 0000 0000 
+   
+-----------------------------------------------
+
+ 1 0000 0000 0000 0000 0000 0000 0000 0000
+   
+ This result has an overflow. But in this project, the overflow shows 0. This is because the +1 process after converting the 0's/1's is done by adding the carry-in bits = 1 in the first bit, which calculation actually become: 
+                                         
+                                         1
+
+   1000 0000 0000 0000 0000 0000 0000 0000
+
+
+   0111 1111 1111 1111 1111 1111 1111 1111
+                                 
+---------------------------------------------
+  1 0000 0000 0000 0000 0000 0000 0000 0000
+ 
+ In this case the the carry-in and carry out bit of the MSB is both 1, therefore overflow = X0R of CO and CI is 0, incorrect results happened. 
+ 
+ To overcome this situation, an OR gate need to be added between XOR gate output and the CO of the MSB. But this may introduce another error in this project due to the hardware design: when we do 0 - 0 = 0, which overflow should not happened, but it will show up incorrectly:
+                                                                
+                                          1
+
+    0000 0000 0000 0000 0000 0000 0000 0000
+
+    1111 1111 1111 1111 1111 1111 1111 1111
+
+---------------------------------------------------------
+
+  1 0000 0000 0000 0000 0000 0000 0000 0000
 
