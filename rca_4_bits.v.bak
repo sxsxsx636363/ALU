@@ -1,0 +1,10 @@
+module rca_4_bits(a, b, c_in, sum, c_out);
+	input [3:0] a, b; 
+	input c_in;
+	output [3:0] sum, c_out;
+	wire w1, W2, W3;
+full_adder a1(A[0], B[0], C_IN, S[0], w1);
+full_adder a2(A[1], B[1], w1, S[1], w2);
+full_adder a3(A[2], B[2], w2, S[2], w3);
+full_adder a4(A[3], B[3], w3, S[3], C_out);
+endmodule
