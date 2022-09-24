@@ -27,7 +27,7 @@ There is a bug in this project(has been corrected in the latest version), which 
 
  1 0000 0000 0000 0000 0000 0000 0000 0000
    
- This result has an overflow. But in this project, the overflow shows 0. This is because the +1 process after converting the 0's/1's is done by adding the carry-in bits = 1 in the first bit, which calculation actually become: 
+ This result has an overflow. But in this project, the overflow shows 0. This is because in this design, during the s'2 complement, the +1 process after converting the 0's/1's is done by adding the carry-in bits = 1 in the first bit, which calculation actually become: 
                                          
                                          1
 
